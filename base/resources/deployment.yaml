@@ -33,4 +33,7 @@ spec:
           httpGet:
             path: /health
             port: default-port
+        env:
+        - name: DEVICE_MGMT_URL
+          value: http://iot-device-mgmt
       serviceAccountName: iot-device-mgmt-web
