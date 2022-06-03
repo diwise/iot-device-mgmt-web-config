@@ -33,12 +33,4 @@ spec:
           httpGet:
             path: /health
             port: default-port
-        volumeMounts:
-          - name: conf-volume-devices-cfg
-            mountPath: /opt/diwise/config
-            readOnly: true
       serviceAccountName: iot-device-mgmt-web
-      volumes:
-        - name: conf-volume-devices-cfg
-          configMap:
-            name: known-devices-cm
