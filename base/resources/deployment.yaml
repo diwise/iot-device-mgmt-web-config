@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: iot-device-mgmt-web
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 0
+    type: RollingUpdate
+  template:
+    spec:
+      containers:
+      - image: ghcr.io/diwise/iot-device-mgmt-web:changeme
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: default-port
+        name: iot-device-mgmt-web
+        ports:
+        - containerPort: 8080
+          name: default-port
+          protocol: TCP
+        resources:
+          limits:
+            cpu: 250m
+            memory: 250Mi
+          requests:
+            cpu: 50m
+            memory: 100Mi
+        startupProbe:
+          httpGet:
+            path: /health
+            port: default-port
+        volumeMounts:
+          - name: conf-volume-devices-cfg
+            mountPath: /opt/diwise/config
+            readOnly: true
+      serviceAccountName: iot-device-mgmt-web
+      volumes:
+        - name: conf-volume-devices-cfg
+          configMap:
+            name: known-devices-cm
