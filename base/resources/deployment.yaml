@@ -33,7 +33,11 @@ spec:
           httpGet:
             path: /health
             port: default-port
-        env:
-        - name: DEVICE_MGMT_URL
-          value: http://iot-device-mgmt
+        volumeMounts:
+        - mountPath: /opt/app-root/src/device-management/config
+          name: config-volume
       serviceAccountName: iot-device-mgmt-web
+      volumes:
+      - configMap:
+          name: devmgmt-web-config
+        name: config-volume
